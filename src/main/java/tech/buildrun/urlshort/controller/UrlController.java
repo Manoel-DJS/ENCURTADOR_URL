@@ -38,6 +38,10 @@ public class UrlController {
 
         return ResponseEntity.ok(new ShortenUrlResponse(redirectUrl));
     }
+    @GetMapping("/")
+    public String ok() {
+        return "OK";
+    }
 
     @GetMapping("{id}")
     public ResponseEntity<Void> redirect(@PathVariable("id") String id){
