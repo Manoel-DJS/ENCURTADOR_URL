@@ -1,5 +1,7 @@
 package tech.buildrun.urlshort.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -17,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.Random;
 
 @RestController
+@Tag(name = "Encurtar URL / LINKS")
 public class UrlController {
 
     private final UrlRepository urlRepository;
@@ -25,6 +28,7 @@ public class UrlController {
         this.urlRepository = urlRepository;
     }
 
+    @Operation(summary = "Encurtar uma URL", description = "Recebe uma URL longa e retorna uma versão encurtada.")
     @PostMapping(value = "/shorten-url")
     public ResponseEntity<ShortenUrlResponse> shortenUrl(@RequestBody ShortenUrlRequest request, HttpServletRequest servletRequest){
         String id;
@@ -38,13 +42,15 @@ public class UrlController {
 
         return ResponseEntity.ok(new ShortenUrlResponse(redirectUrl));
     }
+
     @GetMapping("/")
     public String ok() {
         return "OK";
     }
 
+    @Operation(summary = "Redirecionar para URL original", description = "Recebe um ID da URL encurtada e redireciona para a URL original.")
     @GetMapping("{id}")
-    public ResponseEntity<Void> redirect(@PathVariable("id") String id){
+    public ResponseEntity<String> redirect(@PathVariable("id") String id){
 
         var url = urlRepository.findById(id);
 
@@ -52,11 +58,7 @@ public class UrlController {
         if(url.isEmpty()){
             return ResponseEntity.notFound().build();
         }
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create(url.get().getFullUrl()));
-
-        return ResponseEntity.status(HttpStatus.FOUND).headers(headers).build();
+        return ResponseEntity.ok(url.get().getFullUrl());
     }
 
 }
