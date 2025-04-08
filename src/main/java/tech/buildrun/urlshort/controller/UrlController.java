@@ -48,9 +48,9 @@ public class UrlController {
         return "OK";
     }
 
-    @Operation(summary = "Redirecionar para URL original", description = "Recebe um ID da URL encurtada e redireciona para a URL original.")
+    @Operation(summary = "Redirecionar para URL original / Teste com Insomnia ou Postman", description = "Recebe um ID da URL encurtada e redireciona para a URL original.")
     @GetMapping("{id}")
-    public ResponseEntity<String> redirect(@PathVariable("id") String id){
+    public ResponseEntity<Void> getUrl(@PathVariable("id") String id){
 
         var url = urlRepository.findById(id);
 
@@ -58,7 +58,20 @@ public class UrlController {
         if(url.isEmpty()){
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(url.get().getFullUrl());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create(url.get().getFullUrl()));
+
+        return ResponseEntity.status(HttpStatus.FOUND).headers(headers).build();
     }
 
+    @Operation(summary = "Redirecionar para URL original em formato String", description = "Recebe um ID da URL encurtada e recebe uma String da URL original.")
+    @GetMapping("/api/{id}/url")
+    public ResponseEntity<String> getUrlAsString(@PathVariable String id) {
+        var url = urlRepository.findById(id);
+        if (url.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(url.get().getFullUrl());
+    }
 }
