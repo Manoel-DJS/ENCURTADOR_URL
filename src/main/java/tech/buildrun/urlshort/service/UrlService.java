@@ -2,6 +2,8 @@ package tech.buildrun.urlshort.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import tech.buildrun.urlshort.controller.dto.ShortenUrlRequest;
@@ -9,6 +11,7 @@ import tech.buildrun.urlshort.controller.dto.ShortenUrlResponse;
 import tech.buildrun.urlshort.entity.UrlEntity;
 import tech.buildrun.urlshort.repository.UrlRepository;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -41,4 +44,8 @@ public class UrlService {
         }
     }
 
+    public Optional<String> getFullUrlById(String id) {
+        return urlRepository.findById(id)
+                .map(UrlEntity::getFullUrl);
+    }
 }
