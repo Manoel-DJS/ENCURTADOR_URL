@@ -2,6 +2,7 @@ package tech.buildrun.urlshort.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import tech.buildrun.urlshort.controller.dto.ShortenUrlRequest;
 import tech.buildrun.urlshort.controller.dto.ShortenUrlResponse;
@@ -9,6 +10,7 @@ import tech.buildrun.urlshort.entity.UrlEntity;
 import tech.buildrun.urlshort.repository.UrlRepository;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class UrlService {
@@ -27,4 +29,16 @@ public class UrlService {
         var redirectUrl = servletRequest.getRequestURL().toString().replace("shorten-url", id);
         return new ShortenUrlResponse(redirectUrl);
     }
+
+    public ShortenUrlResponse getUrlAsString(String id){
+        Optional<UrlEntity> optionalUrl = urlRepository.findById(id);
+
+        if (optionalUrl.isPresent()) {
+            var urlFull = optionalUrl.get().getFullUrl();
+            return new ShortenUrlResponse(urlFull);
+        } else {
+            return new ShortenUrlResponse("ID não encontrado");
+        }
+    }
+
 }
