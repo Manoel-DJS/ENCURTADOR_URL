@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Service
 public class UrlService {
-    private UrlRepository urlRepository;
+    private final UrlRepository urlRepository;
 
     public UrlService(UrlRepository urlRepository) {
         this.urlRepository = urlRepository;
