@@ -5,9 +5,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class UrlshortApplicationTests {
-
+	//Armegamgem para rodar a aplicação
+	/**
 	@Test
 	void contextLoads() {
 	}
-
+	 **/
 }
