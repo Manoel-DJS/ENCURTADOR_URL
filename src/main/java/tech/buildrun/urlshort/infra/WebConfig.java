@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     private static final String[] CORS_PERMISSION = {
-        "http://localhost:4200", "https://encurtador-url-8lqz.onrender.com"
+        "http://localhost:4200", "https://encurtador-url-8lqz.onrender.com", "https://url-short-angular.vercel.app/"
     };
 
     @Override
